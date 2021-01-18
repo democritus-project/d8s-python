@@ -1,0 +1,3 @@
+democritus-algorithms @ git+https://github.com/democritus-project/democritus-algorithms.git#egg=democritus-algorithms
+jinja2
+more_itertools

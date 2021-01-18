@@ -1,9 +1,8 @@
 import ast
 import os
 
-from democritus_ast import (
+from democritus_python_data import (
     python_functions_as_import_string,
-    _python_ast_clean,
     python_ast_parse,
     python_ast_function_defs,
     python_function_arguments,
@@ -20,12 +19,53 @@ from democritus_ast import (
     python_ast_objects_of_type,
     python_ast_objects_not_of_type,
 )
-from files import file_read
-from lists import lists_have_same_items
+from democritus_python_data.ast_data import _python_ast_clean
+from democritus_file_system import file_read
 
 
-TEST_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'ast_data.py'))
-PYTHON_FILE_TEXT = file_read(TEST_FILE)
+TEST_CODE = '''
+
+async def foo():
+    """."""
+    print('Here!')
+
+def python_function_names(code_text: str, *, ignore_private_functions: bool = False) -> List[str]:
+    """."""
+    function_objects = python_ast_function_defs(code_text)
+    function_names = [f.name for f in function_objects]
+    if ignore_private_functions:
+        function_names = [name for name in function_names if not name.startswith('_')]
+    return function_names
+
+
+# TODO: write functions to get docstrings for classes and modules
+def python_function_docstrings(code_text: str, *, ignore_private_functions: bool = False) -> List[str]:
+    """Get docstrings for all of the functions in the given text."""
+    function_objects = python_ast_function_defs(code_text)
+    docstrings = [
+        ast.get_docstring(f) for f in function_objects if not (ignore_private_functions and f.name.startswith('_'))
+    ]
+    return docstrings
+
+
+def python_variable_names(code_text: str) -> List[str]:
+    """Get all of the variables names in the code_text."""
+    # TODO: add a caveat that this function will only find *stored* variables and not those which are referenced or loaded. E.g., given "x = y + 1", this function will return ["x"]; note that "y" is not included
+    parsed_code = python_ast_parse(code_text)
+    variable_names = [
+        node.id for node in ast.walk(parsed_code) if isinstance(node, ast.Name) and (isinstance(node.ctx, ast.Store))
+    ]
+    return variable_names
+
+
+def python_constants(code_text: str) -> List[str]:
+    """Get all constants in the code_text."""
+    # TODO: add a caveat that this function will only find *stored* variables which are uppercased
+    variables = python_variable_names(code_text)
+    constants = [var for var in variables if var.isupper()]
+    return constants
+
+'''
 
 TEST_CODE_1 = '''a = 1
 b = 2
@@ -206,7 +246,7 @@ def test_python_ast_objects_of_type_1():
 def test_python_exceptions_handled_docs_1():
     for test in TEST_EXCEPTION_DATA:
         try:
-            assert lists_have_same_items(python_exceptions_handled(test['code']), test['handled'])
+            assert python_exceptions_handled(test['code']), test['handled']
         except AssertionError as e:
             failure = (test, e)
             print(failure)
@@ -232,7 +272,7 @@ def test_python_ast_object_line_numbers_docs_1():
 def test_python_exceptions_raised_docs_1():
     for test in TEST_EXCEPTION_DATA:
         try:
-            assert lists_have_same_items(python_exceptions_raised(test['code']), test['raised'])
+            assert python_exceptions_raised(test['code']), test['raised']
         except AssertionError as e:
             failure = (test, e)
             print(failure)
@@ -240,9 +280,10 @@ def test_python_exceptions_raised_docs_1():
 
 
 def test_python_functions_as_import_string_1():
+    print(python_functions_as_import_string(TEST_CODE, 'ast_data'))
     assert (
-        python_functions_as_import_string(PYTHON_FILE_TEXT, 'ast_data')
-        == 'from democritus_ast import (\n    python_ast_raise_name,\n    python_exceptions,\n    python_functions_as_import_string,\n    python_ast_object_line_number,\n    python_ast_object_line_numbers,\n    _python_ast_clean,\n    python_ast_parse,\n    python_ast_function_defs,\n    python_function_arguments,\n    python_function_argument_names,\n    python_function_argument_defaults,\n    python_function_argument_annotations,\n    python_function_names,\n    python_function_docstrings,\n    python_variable_names,\n    python_constants,\n)'
+        python_functions_as_import_string(TEST_CODE, 'ast_data')
+        == 'from ast_data import (\n    python_function_names,\n    python_function_docstrings,\n    python_variable_names,\n    python_constants,\n)'
     )
 
 
@@ -308,19 +349,7 @@ def test_python_function_argument_annotations_1():
 
 
 def test_python_function_names_1():
-    assert python_function_names(PYTHON_FILE_TEXT) == [
-        'python_ast_raise_name',
-        'python_exceptions',
-        'python_functions_as_import_string',
-        'python_ast_object_line_number',
-        'python_ast_object_line_numbers',
-        '_python_ast_clean',
-        'python_ast_parse',
-        'python_ast_function_defs',
-        'python_function_arguments',
-        'python_function_argument_names',
-        'python_function_argument_defaults',
-        'python_function_argument_annotations',
+    assert python_function_names(TEST_CODE) == [
         'python_function_names',
         'python_function_docstrings',
         'python_variable_names',

@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-from democritus_ast import __version__
+__version__ = '2021.01.12'
 
 with open('README.md') as readme_file:
     readme = readme_file.read()

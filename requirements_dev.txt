@@ -3,3 +3,4 @@ twine
 pytest
 pytest-cov
 codecov
+democritus-file-system @ git+https://github.com/democritus-project/democritus-file-system.git#egg=democritus-file-system
