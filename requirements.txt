@@ -1,4 +1,4 @@
 democritus-algorithms
+importlib-metadata; python_version < '3.8'
 jinja2
 more_itertools
-importlib-metadata; python_version < '3.8'

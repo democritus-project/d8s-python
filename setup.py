@@ -12,8 +12,8 @@ with open('requirements_dev.txt') as requirements_dev_file:
     test_requirements = requirements_dev_file.read().splitlines()
 
 setup(
-    name='democritus_ast',
-    description="Democritus functions for working with Python ASTs.",
+    name='democritus_python',
+    description="Democritus functions for working with Python code.",
     long_description=readme,
     long_description_content_type="text/markdown",
     author="Floyd Hightower",
@@ -41,5 +41,5 @@ setup(
         'Programming Language :: Python :: 3.9',
     ],
     test_suite='tests',
-    tests_require=test_requirements
+    tests_require=test_requirements,
 )
