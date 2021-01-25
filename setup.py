@@ -18,7 +18,7 @@ setup(
     long_description_content_type="text/markdown",
     author="Floyd Hightower",
     author_email='floyd.hightower27@gmail.com',
-    url='https://github.com/democritus-project/democritus-ast',
+    url='https://github.com/democritus-project/democritus-python',
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
     packages=find_packages(exclude=('tests')),

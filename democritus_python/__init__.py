@@ -6,7 +6,7 @@ except ImportError:
 try:
     __version__ = version('democritus_python')
 except PackageNotFoundError:
-    message = 'Unable to find a version number for "democritus_python". This likely means the library was not installed properly. Please re-install it and, if the problem persists, raise an issue here: https://github.com/democritus-project/democritus-python-data/issues.'
+    message = 'Unable to find a version number for "democritus_python". This likely means the library was not installed properly. Please re-install it and, if the problem persists, raise an issue here: https://github.com/democritus-project/democritus-python/issues.'
     print(message)
 
 __author__ = '''Floyd Hightower'''
