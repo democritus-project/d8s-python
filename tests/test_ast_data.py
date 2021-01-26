@@ -239,7 +239,7 @@ else:
 def test_python_ast_exception_handler_exceptions_raised_1():
     except_handler = tuple(python_ast_objects_of_type(TEST_CODE_WITH_EXCEPTION, ast.ExceptHandler))[0]
     result = python_ast_exception_handler_exceptions_raised(except_handler)
-    assert result == ['ZeroDivisionError']
+    assert tuple(result) == ('ZeroDivisionError',)
 
 
 def test_python_ast_objects_not_of_type_docs_1():
