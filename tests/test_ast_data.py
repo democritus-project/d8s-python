@@ -18,6 +18,7 @@ from democritus_python import (
     python_exceptions_handled,
     python_ast_objects_of_type,
     python_ast_objects_not_of_type,
+    python_ast_exception_handler_exceptions_raised,
 )
 from democritus_python.ast_data import _python_ast_clean
 from democritus_file_system import file_read
@@ -79,6 +80,11 @@ def someMethod(x):
 f = someMethod(b)
 
 print(f)'''
+
+TEST_CODE_WITH_EXCEPTION = '''try:
+    return a  / b
+except ZeroDivisionError:
+    raise'''
 
 TEST_CODE_WITH_PRIVATE_FUNCTION = '''def _test(a: str):
     """Docstring."""
@@ -228,6 +234,12 @@ else:
         'raised': ['pint.UndefinedUnitError', 'pint.AError'],
     },
 ]
+
+
+def test_python_ast_exception_handler_exceptions_raised_1():
+    except_handler = tuple(python_ast_objects_of_type(TEST_CODE_WITH_EXCEPTION, ast.ExceptHandler))[0]
+    result = python_ast_exception_handler_exceptions_raised(except_handler)
+    assert result == ['ZeroDivisionError']
 
 
 def test_python_ast_objects_not_of_type_docs_1():

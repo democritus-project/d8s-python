@@ -1,13 +1,6 @@
 from typing import Any, Iterable, Tuple
 
 
-def deduplicate(iterable: Iterable) -> list:
-    """Deduplicate the iterable."""
-    # TODO: will this work for every type except for dicts???
-    deduplicated_list = list(set(iterable))
-    return deduplicated_list
-
-
 def list_item_indexes(list_arg: list, item: Any) -> Tuple[int, ...]:
     """Find the given item in the iterable. Return -1 if the item is not found."""
     indexes = [index for index, value in enumerate(list_arg) if value == item]

@@ -4,7 +4,7 @@ from typing import List, Tuple, Iterable, Optional, Union
 
 import more_itertools
 
-from .ast_data_temp_utils import deduplicate, list_replace, list_delete_empty_items
+from .ast_data_temp_utils import list_replace, list_delete_empty_items
 
 # TODO: all of these functions where code_text is given should also be able to read a file at a given path (?)
 
@@ -76,7 +76,7 @@ def python_ast_exception_handler_exceptions_raised(handler: ast.ExceptHandler) -
                     exceptions_names = list_replace(
                         exceptions_names, name, python_ast_exception_handler_exceptions_handled(handler)
                     )
-            return deduplicate(more_itertools.flatten(exceptions_names))
+            return list(more_itertools.flatten(exceptions_names))
     return []
 
 
@@ -99,8 +99,7 @@ def python_exceptions_raised(code_text: str) -> List[str]:
     nodes = python_ast_objects_not_of_type(parsed_code, ast.ExceptHandler)
     exceptions.extend(list(map(python_ast_raise_name, (node for node in nodes if isinstance(node, ast.Raise)))))
 
-    deduplicated_exceptions = deduplicate(more_itertools.flatten(exceptions))
-    return deduplicated_exceptions
+    return exceptions
 
 
 def python_functions_as_import_string(code_text: str, module_name: str) -> str:
