@@ -52,7 +52,7 @@ def python_ast_exception_handler_exceptions_handled(handler: ast.ExceptHandler) 
     if isinstance(handler, ast.ExceptHandler):
         handler_has_multiple_exceptions = handler.type and hasattr(handler.type, 'elts')
         if handler_has_multiple_exceptions:
-            return (_python_ast_exception_name(i) for i in handler.type.elts)
+            yield from (_python_ast_exception_name(i) for i in handler.type.elts)
         else:
             exception_name = _python_ast_exception_name(handler)
             if exception_name:
@@ -74,13 +74,15 @@ def python_ast_exception_handler_exceptions_raised(handler: ast.ExceptHandler) -
                     exceptions_names = list_replace(
                         exceptions_names, name, python_ast_exception_handler_exceptions_handled(handler)
                     )
-            yield from more_itertools.flatten(exceptions_names)
+            yield from more_itertools.collapse(exceptions_names, base_type=str)
 
 
 def python_exceptions_handled(code_text: str) -> Iterable[str]:
     """Return a list of all exceptions handled in the given code."""
     ast_except_handlers = python_ast_objects_of_type(code_text, ast.ExceptHandler)
-    yield from more_itertools.flatten(map(python_ast_exception_handler_exceptions_handled, ast_except_handlers))
+    yield from more_itertools.collapse(
+        list(map(python_ast_exception_handler_exceptions_handled, ast_except_handlers)), base_type=str
+    )
 
 
 def python_exceptions_raised(code_text: str) -> Iterable[str]:
@@ -94,7 +96,7 @@ def python_exceptions_raised(code_text: str) -> Iterable[str]:
     nodes = python_ast_objects_not_of_type(parsed_code, ast.ExceptHandler)
     exceptions.extend(list(map(python_ast_raise_name, (node for node in nodes if isinstance(node, ast.Raise)))))
 
-    yield from more_itertools.flatten(exceptions)
+    yield from more_itertools.collapse(exceptions, base_type=str)
 
 
 def python_functions_as_import_string(code_text: str, module_name: str) -> str:

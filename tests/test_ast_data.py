@@ -258,7 +258,7 @@ def test_python_ast_objects_of_type_1():
 def test_python_exceptions_handled_docs_1():
     for test in TEST_EXCEPTION_DATA:
         try:
-            assert python_exceptions_handled(test['code']), test['handled']
+            assert list(python_exceptions_handled(test['code'])) == test['handled']
         except AssertionError as e:
             failure = (test, e)
             print(failure)
@@ -284,7 +284,7 @@ def test_python_ast_object_line_numbers_docs_1():
 def test_python_exceptions_raised_docs_1():
     for test in TEST_EXCEPTION_DATA:
         try:
-            assert python_exceptions_raised(test['code']), test['raised']
+            assert list(python_exceptions_raised(test['code'])) == test['raised']
         except AssertionError as e:
             failure = (test, e)
             print(failure)
