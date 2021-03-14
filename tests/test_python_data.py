@@ -33,7 +33,7 @@ from democritus_python import (
     python_type_name,
     python_object_type_to_word,
     python_todos,
-    python_function_line_count,
+    python_line_count,
     python_function_lengths,
     python_object_signature,
 )
@@ -94,11 +94,11 @@ def test_python_function_lengths_1():
     assert result == [3]
 
 
-def test_python_function_line_count_1():
-    result = python_function_line_count(SIMPLE_FUNCTION)
+def test_python_line_count_1():
+    result = python_line_count(SIMPLE_FUNCTION)
     assert result == 3
 
-    result = python_function_line_count(SIMPLE_FUNCTION, ignore_empty_lines=False)
+    result = python_line_count(SIMPLE_FUNCTION, ignore_empty_lines=False)
     assert result == 4
 
 
