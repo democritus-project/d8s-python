@@ -1,8 +1,8 @@
 # Democritus Python
 
-[![PyPI](https://img.shields.io/pypi/v/democritus-python.svg)](https://pypi.python.org/pypi/democritus-python)
-[![Build Status](https://travis-ci.com/democritus-project/democritus-python.svg?branch=master)](https://travis-ci.com/democritus-project/democritus-python)
-[![codecov](https://codecov.io/gh/democritus-project/democritus-python/branch/master/graph/badge.svg?token=V0WOIXRGMM)](https://codecov.io/gh/democritus-project/democritus-python)
+[![PyPI](https://img.shields.io/pypi/v/d8s-python.svg)](https://pypi.python.org/pypi/d8s-python)
+[![Build Status](https://travis-ci.com/democritus-project/d8s-python.svg?branch=main)](https://travis-ci.com/democritus-project/d8s-python)
+[![codecov](https://codecov.io/gh/democritus-project/d8s-python/branch/main/graph/badge.svg?token=V0WOIXRGMM)](https://codecov.io/gh/democritus-project/d8s-python)
 
 Democritus functions<sup>[1]</sup> for working with Python data (code and ASTs).
 
