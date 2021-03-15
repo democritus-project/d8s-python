@@ -1,7 +1,7 @@
 import ast
 import os
 
-from democritus_python import (
+from d8s_python import (
     python_functions_as_import_string,
     python_ast_parse,
     python_ast_function_defs,
@@ -20,7 +20,7 @@ from democritus_python import (
     python_ast_objects_not_of_type,
     python_ast_exception_handler_exceptions_raised,
 )
-from democritus_python.ast_data import _python_ast_clean
+from d8s_python.ast_data import _python_ast_clean
 from democritus_file_system import file_read
 
 
