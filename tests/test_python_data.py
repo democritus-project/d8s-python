@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from democritus_python import (
+from d8s_python import (
     python_functions_signatures,
     python_namespace_has_argument,
     python_traceback_prettify,
@@ -39,7 +39,7 @@ from democritus_python import (
 )
 from democritus_file_system import file_read, file_write, file_name, directory_create, directory_delete
 
-PYTHON_FILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../democritus_python/python_data.py'))
+PYTHON_FILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../d8s_python/python_data.py'))
 PYTHON_FILE_TEXT = file_read(PYTHON_FILE_PATH)
 SIMPLE_FUNCTION = '''def test(a) -> List:
     print(a)
