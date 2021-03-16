@@ -120,11 +120,11 @@ def python_function_blocks(code_text: str, *, ignore_private_functions: bool = F
     return function_block_strings
 
 
-def python_function_line_count(function_text: str, *, ignore_empty_lines: bool = True) -> int:
+def python_line_count(python_code: str, *, ignore_empty_lines: bool = True) -> int:
     """Return the number of lines in the given function_text."""
     from democritus_lists import list_delete_empty_items
 
-    lines = function_text.splitlines()
+    lines = python_code.splitlines()
     if ignore_empty_lines:
         return len(list_delete_empty_items(lines))
     else:
@@ -134,7 +134,7 @@ def python_function_line_count(function_text: str, *, ignore_empty_lines: bool =
 def python_function_lengths(code_text: str) -> List[int]:
     """Find the lengths of each function in the given code_text."""
     function_blocks = python_function_blocks(code_text)
-    return [python_function_line_count(function_block) for function_block in function_blocks]
+    return [python_line_count(function_block) for function_block in function_blocks]
 
 
 def python_version() -> str:
