@@ -6,7 +6,7 @@ name: Upload to PyPi
 on:
   push:
     tags:
-      - '20*'
+      - 'v*'
   release:
     types: [published]
 
