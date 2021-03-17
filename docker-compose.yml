@@ -8,6 +8,19 @@ services:
       context: .
     volumes:
       - ./:/code
+      - ~/.gitconfig:/root/.gitconfig
+
+  bump-patch:
+    <<: *base
+    command: bumpversion patch
+
+  bump-minor:
+    <<: *base
+    command: bumpversion minor
+
+  bump-major:
+    <<: *base
+    command: bumpversion major
 
   # a fully loaded development environment to test new code
   dev:

@@ -10,3 +10,4 @@ pytest
 pytest-cov
 d8s-file-system
 d8s-strings
+bump2version
