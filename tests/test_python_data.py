@@ -2,42 +2,41 @@ import inspect
 import os
 
 import pytest
+from d8s_file_system import directory_create, directory_delete, file_name, file_read, file_write
 
 from d8s_python import (
-    python_functions_signatures,
-    python_namespace_has_argument,
-    python_traceback_prettify,
-    python_traceback_pretty_print,
     python_clean,
-    python_function_blocks,
-    python_version,
-    python_is_version_2,
-    python_is_version_3,
-    python_files_using_function,
-    python_keywords,
-    python_object_properties_enumerate,
+    python_code_details,
     python_copy_deep,
     python_copy_shallow,
-    python_make_pythonic,
-    python_file_names,
-    python_fstrings,
-    python_code_details,
     python_disassemble,
-    python_stack_local_data,
-    python_object_doc_string,
-    python_object_source_file,
-    python_object_module,
-    python_object_source_code,
-    python_object_signature,
-    python_sort_type_list_by_name,
-    python_type_name,
-    python_object_type_to_word,
-    python_todos,
-    python_line_count,
+    python_file_names,
+    python_files_using_function,
+    python_fstrings,
+    python_function_blocks,
     python_function_lengths,
+    python_functions_signatures,
+    python_is_version_2,
+    python_is_version_3,
+    python_keywords,
+    python_line_count,
+    python_make_pythonic,
+    python_namespace_has_argument,
+    python_object_doc_string,
+    python_object_module,
+    python_object_properties_enumerate,
     python_object_signature,
+    python_object_source_code,
+    python_object_source_file,
+    python_object_type_to_word,
+    python_sort_type_list_by_name,
+    python_stack_local_data,
+    python_todos,
+    python_traceback_prettify,
+    python_traceback_pretty_print,
+    python_type_name,
+    python_version,
 )
-from democritus_file_system import file_read, file_write, file_name, directory_create, directory_delete
 
 PYTHON_FILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../d8s_python/python_data.py'))
 PYTHON_FILE_TEXT = file_read(PYTHON_FILE_PATH)
@@ -127,11 +126,7 @@ def test_python_code_details_docs_1():
     assert result.startswith(
         '''Name:              <module>
 Filename:          <disassembly>
-Argument count:    0
-Kw-only arguments: 0
-Number of locals:  0
-Stack size:        3
-Flags:             NOFREE'''
+'''
     )
 
 
@@ -293,17 +288,17 @@ def test_python_traceback_pretty_print_docs_1(capsys):
 
 
 def test_python_fstrings_docs_1():
-    python_f_strings = python_fstrings('Hello, {name}. You are {age}.')
-    assert python_f_strings == ['name', 'age']
+    python_f_strings = tuple(python_fstrings('Hello, {name}. You are {age}.'))
+    assert python_f_strings == ('name', 'age')
 
-    python_f_strings = python_fstrings('Hello, {name}. You are {age}.', include_braces=True)
-    assert python_f_strings == ['{name}', '{age}']
+    python_f_strings = tuple(python_fstrings('Hello, {name}. You are {age}.', include_braces=True))
+    assert python_f_strings == ('{name}', '{age}')
 
-    python_f_strings = python_fstrings('Hello, {new_comedian!r}')
-    assert python_f_strings == ['new_comedian!r']
+    python_f_strings = tuple(python_fstrings('Hello, {new_comedian!r}'))
+    assert python_f_strings == ('new_comedian!r',)
 
-    python_f_strings = python_fstrings('Hello, {}'.format('Bob'))
-    assert python_f_strings == []
+    python_f_strings = tuple(python_fstrings('Hello, {}'.format('Bob')))
+    assert python_f_strings == ()
 
 
 def test_python_object_type_to_word_docs_1():
@@ -335,12 +330,12 @@ def test_python_make_pythonic_docs_1():
 
 def test_python_object_source_file_docs_1():
     result = python_object_source_file(file_read)
-    assert result.endswith('democritus_file_system/files.py')
+    assert result.endswith('d8s_file_system/files.py')
 
 
 def test_python_object_module_docs_1():
     result = python_object_module(file_read)
-    assert result == 'democritus_file_system.files'
+    assert result == 'd8s_file_system.files'
 
 
 def test_python_sort_type_list_by_name_docs_1():
@@ -360,7 +355,7 @@ def test_python_file_names_docs_1():
 def test_python_files_using_function_docs_1():
     results = python_files_using_function('python_files_using_function', search_path=DEMOCRITUS_ROOT_PATH)
     assert len(results) == 2
-    assert file_name(results[0]) == 'test_python_data.py'
+    assert file_name(results[0]) == 'test_python_data.py' or file_name(results[1]) == 'test_python_data.py'
 
 
 def test_python_is_version_2_docs_1():

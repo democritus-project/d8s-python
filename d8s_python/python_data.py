@@ -2,7 +2,8 @@ import argparse
 import re
 import sys
 import traceback
-from typing import Any, List, Union, Optional
+from typing import Any, Iterator, List, Optional, Union
+
 
 # TODO: for this function, I would like to have a decorator that splits the given code_text into code blocks for each function and then creates a sig for each of them
 # @decorators.map_firstp_arg
@@ -10,8 +11,9 @@ def python_functions_signatures(
     code_text: str, *, ignore_private_functions: bool = False, keep_function_name: bool = False
 ) -> List[str]:
     """Return the function signatures (the parameters and their types/default values) for all of the functions in the given code_text."""
+    from d8s_strings import string_remove_from_start
+
     from .ast_data import python_function_names
-    from democritus_strings import string_remove_from_start
 
     signatures = []
 
@@ -42,7 +44,7 @@ def python_todos(code_text: str, todo_regex: str = 'TODO:.*') -> List[str]:
 # @decorators.map_first_arg
 def python_make_pythonic(name: str) -> str:
     """Make the name pythonic (e.g. 'fooBar' => 'foo_bar', 'foo-bar' => 'foo_bar', 'foo bar' => 'foo_bar', 'Foo Bar' => 'foo_bar')."""
-    from democritus_strings import snake_case, string_split_on_uppercase, lowercase
+    from d8s_strings import lowercase, snake_case, string_split_on_uppercase
 
     split_string = '_'.join(
         [
@@ -87,9 +89,10 @@ def python_clean(code_text: str) -> str:
 
 def python_function_blocks(code_text: str, *, ignore_private_functions: bool = False) -> List[str]:
     """Find the code (as a string) for every function in the given code_text."""
+    from d8s_lists import has_index
+    from d8s_strings import string_chars_at_start_len
+
     from .ast_data import python_ast_function_defs, python_ast_object_line_numbers
-    from democritus_lists import list_has_index
-    from democritus_strings import string_chars_at_start_len
 
     function_block_strings = []
     code_text_as_lines = code_text.splitlines()
@@ -105,7 +108,7 @@ def python_function_blocks(code_text: str, *, ignore_private_functions: bool = F
                 continue
 
         # the code below checks to see if the line after what was determined to be the last line of the function should also be included in the function block (which is the case when the closing parenthesis of a function call in another function is on a newline (see the python_data_tests.py::test_python_function_blocks_edge_cases_1 for an example))
-        if list_has_index(code_text_as_lines, end):
+        if has_index(code_text_as_lines, end):
             # find the indentation level of the function definition (the first line of the function)
             function_indentation = string_chars_at_start_len(function_block_lines[0], ' ')
             # TODO: the check below assumes that spaces are used instead of tabs
@@ -122,11 +125,11 @@ def python_function_blocks(code_text: str, *, ignore_private_functions: bool = F
 
 def python_line_count(python_code: str, *, ignore_empty_lines: bool = True) -> int:
     """Return the number of lines in the given function_text."""
-    from democritus_lists import list_delete_empty_items
+    from d8s_lists import truthy_items
 
     lines = python_code.splitlines()
     if ignore_empty_lines:
-        return len(list_delete_empty_items(lines))
+        return len(tuple(truthy_items(lines)))
     else:
         return len(lines)
 
@@ -156,7 +159,7 @@ def python_is_version_3() -> bool:
 # @decorators.map_first_arg
 def python_files_using_function(function_name: str, search_path: str) -> List[str]:
     """Find where the given function is used in the given search path."""
-    from democritus_file_system import directory_read_files_with_path_matching
+    from d8s_file_system import directory_read_files_with_path_matching
 
     files_using_function = []
 
@@ -174,13 +177,13 @@ def python_keywords(code_text: Optional[str] = None) -> List[str]:
     """Get a list of the python keywords."""
     import keyword
 
-    from democritus_strings import string_words
-
     python_keywords = keyword.kwlist
 
     if code_text is None:
         return python_keywords
     else:
+        from d8s_strings import string_words
+
         words_in_code_text = string_words(code_text)
         keywords_used = []
 
@@ -236,7 +239,7 @@ def python_copy_shallow(python_object: Any) -> Any:
 # @decorators.map_first_arg
 def python_file_names(path: str, *, exclude_tests: bool = False) -> List[str]:
     """Find all python files in the given directory."""
-    from democritus_file_system import directory_file_names_matching
+    from d8s_file_system import directory_file_names_matching
 
     files = directory_file_names_matching(path, '*.py')
 
@@ -253,15 +256,15 @@ def python_file_names(path: str, *, exclude_tests: bool = False) -> List[str]:
 
 
 # @decorators.map_first_arg
-def python_fstrings(code_text: str, *, include_braces: bool = False) -> List[str]:
+def python_fstrings(code_text: str, *, include_braces: bool = False) -> Iterator[str]:
     """Find all of the python formatted string literals in the given text. See https://realpython.com/python-f-strings/ for more details about f-strings."""
-    from democritus_lists import list_flatten
-    from democritus_grammars import python_formatted_string_literal
+    from d8s_grammars import python_formatted_string_literal
+    from d8s_lists import flatten
 
-    python_f_strings = list_flatten(python_formatted_string_literal.searchString(code_text).asList())
+    python_f_strings = flatten(python_formatted_string_literal.searchString(code_text).asList())
 
     if not include_braces:
-        python_f_strings = [f_string.strip('{').strip('}') for f_string in python_f_strings]
+        python_f_strings = (f_string.strip('{').strip('}') for f_string in python_f_strings)
 
     return python_f_strings
 

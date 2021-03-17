@@ -1,10 +1,10 @@
 import ast
 import sys
-from typing import List, Tuple, Iterable, Optional, Union
+from typing import Iterable, List, Optional, Tuple, Union
 
 import more_itertools
 
-from .ast_data_temp_utils import list_replace, list_delete_empty_items
+from .ast_data_temp_utils import list_delete_empty_items, list_replace
 
 # TODO: all of these functions where code_text is given should also be able to read a file at a given path (?)
 
@@ -124,7 +124,7 @@ def python_ast_object_line_number(ast_object: object) -> Optional[int]:
 
 def python_ast_object_line_numbers(ast_object: object) -> Tuple[int, int]:
     """."""
-    from democritus_algorithms import depth_first_traverse
+    from d8s_algorithms import depth_first_traverse
 
     line_numbers = list_delete_empty_items(
         list(
@@ -154,7 +154,7 @@ def python_ast_objects_of_type(code_text_or_ast_object: Union[str, object], ast_
 
 def python_ast_objects_not_of_type(code_text_or_ast_object: Union[str, object], ast_type: type) -> Iterable[object]:
     """Return all of the ast objects which are not of the given ast_type in the code_text_or_ast_object."""
-    from democritus_algorithms import depth_first_traverse
+    from d8s_algorithms import depth_first_traverse
 
     if isinstance(code_text_or_ast_object, str):
         parsed_code = python_ast_parse(code_text_or_ast_object)

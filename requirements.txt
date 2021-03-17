@@ -1,7 +1,7 @@
-democritus-algorithms
-democritus-lists
-democritus-strings
-democritus_grammars
+d8s-algorithms
+d8s-lists
+d8s-strings
+d8s-grammars
 importlib-metadata; python_version < '3.8'
 jinja2
 more_itertools
