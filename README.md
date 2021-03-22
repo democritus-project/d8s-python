@@ -12,6 +12,8 @@ Democritus functions<sup>[1]</sup> for working with Python data (code and ASTs).
 
 [1] Democritus functions are <i>simple, effective, modular, well-tested, and well-documented</i> Python functions.
 
+We use `d8s` as an abbreviation for `democritus` (you can read more about this [here](https://github.com/democritus-project/roadmap#what-is-d8s)).
+
 ## Usage
 
 Coming soon...
