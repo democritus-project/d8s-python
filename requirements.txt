@@ -1,4 +1,4 @@
-d8s-algorithms==0.3.0
+d8s-algorithms==0.5.0
 d8s-lists==0.5.0
 d8s-strings==0.2.0
 d8s_file_system<1.0.0
