@@ -1,7 +1,7 @@
 d8s-algorithms==0.*
 d8s-lists==0.*
 d8s-strings==0.*
-d8s_file_system<1.0.0
+d8s-file-system==0.*
 d8s-grammars==0.*
 importlib-metadata; python_version < '3.8'
 jinja2
