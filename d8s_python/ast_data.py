@@ -142,14 +142,23 @@ def _python_ast_clean(code_text: str) -> str:
 
 
 # TODO: have a decorator to parse a first argument that is a string
-def python_ast_objects_of_type(code_text_or_ast_object: Union[str, object], ast_type: type) -> Iterable[object]:
+def python_ast_objects_of_type(
+    code_text_or_ast_object: Union[str, object], ast_type: type, *, recursive_search: bool = True
+) -> Iterable[object]:
     """Return all of the ast objects of the given ast_type in the code_text_or_ast_object."""
     if isinstance(code_text_or_ast_object, str):
         parsed_code = python_ast_parse(code_text_or_ast_object)
     else:
         parsed_code = code_text_or_ast_object
-    ast_objects_of_type = (node for node in ast.walk(parsed_code) if isinstance(node, ast_type))
-    return ast_objects_of_type
+
+    if recursive_search:
+        yield from (node for node in ast.walk(parsed_code) if isinstance(node, ast_type))
+    else:
+        if isinstance(parsed_code, ast_type):
+            yield parsed_code
+
+        if hasattr(parsed_code, 'body'):
+            yield from (node for node in parsed_code.body if isinstance(node, ast_type))
 
 
 def python_ast_objects_not_of_type(code_text_or_ast_object: Union[str, object], ast_type: type) -> Iterable[object]:
@@ -190,9 +199,9 @@ def python_ast_parse(code_text: str) -> ast.Module:
     return parsed_code
 
 
-def python_ast_function_defs(code_text: str) -> Iterable[ast.FunctionDef]:
+def python_ast_function_defs(code_text: str, recursive_search: bool = True) -> Iterable[ast.FunctionDef]:
     """."""
-    function_defs = python_ast_objects_of_type(code_text, ast.FunctionDef)
+    function_defs = python_ast_objects_of_type(code_text, ast.FunctionDef, recursive_search=recursive_search)
     return function_defs
 
 
@@ -228,25 +237,22 @@ def python_function_argument_annotations(function_text: str) -> List[str]:
     return annotations
 
 
-# TODO: implement this
-# def python_function_keyword_argument_names(function_text: str):
-#     """."""
-#     pass
-
-
-def python_function_names(code_text: str, *, ignore_private_functions: bool = False) -> List[str]:
+def python_function_names(
+    code_text: str, *, ignore_private_functions: bool = False, ignore_nested_functions: bool = False
+) -> List[str]:
     """."""
-    function_objects = python_ast_function_defs(code_text)
+    function_objects = python_ast_function_defs(code_text, recursive_search=not ignore_nested_functions)
     function_names = [f.name for f in function_objects]
     if ignore_private_functions:
         function_names = [name for name in function_names if not name.startswith('_')]
     return function_names
 
 
-# TODO: write functions to get docstrings for classes and modules
-def python_function_docstrings(code_text: str, *, ignore_private_functions: bool = False) -> List[str]:
+def python_function_docstrings(
+    code_text: str, *, ignore_private_functions: bool = False, ignore_nested_functions: bool = False
+) -> List[str]:
     """Get docstrings for all of the functions in the given text."""
-    function_objects = python_ast_function_defs(code_text)
+    function_objects = python_ast_function_defs(code_text, recursive_search=not ignore_nested_functions)
     docstrings = [
         ast.get_docstring(f) for f in function_objects if not (ignore_private_functions and f.name.startswith('_'))
     ]

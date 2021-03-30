@@ -94,6 +94,15 @@ TEST_FUNCTION_WITH_DEFAULT = '''def test(a: str = ''):
     """Docstring."""
     return a'''
 
+TEST_CODE_WITH_NESTED_FUNCTION = '''
+def f(n):
+    """a."""
+    def sq(i):
+        """b."""
+        return i * i
+    return sq(n)
+'''
+
 TEST_EXCEPTION_DATA = [
     {  # test a simple raise
         'code': '''raise ValueError('I cannot divide by zero')''',
@@ -255,6 +264,16 @@ def test_python_ast_objects_of_type_1():
     assert isinstance(result[0], ast.FunctionDef)
 
 
+def test_python_ast_objects_of_type__only_first_level():
+    # test without limiting search to the first level
+    assert len(tuple(python_ast_objects_of_type(TEST_CODE_WITH_NESTED_FUNCTION, ast.FunctionDef))) == 2
+
+    # test limiting search to the first level
+    result = tuple(python_ast_objects_of_type(TEST_CODE_WITH_NESTED_FUNCTION, ast.FunctionDef, recursive_search=False))
+    assert len(result) == 1
+    assert isinstance(result[0], ast.FunctionDef)
+
+
 def test_python_exceptions_handled_docs_1():
     for test in TEST_EXCEPTION_DATA:
         try:
@@ -371,12 +390,22 @@ def test_python_function_names_1():
     assert python_function_names(TEST_CODE_WITH_PRIVATE_FUNCTION, ignore_private_functions=True) == []
 
 
+def test_python_function_names__nested_functions():
+    assert python_function_names(TEST_CODE_WITH_NESTED_FUNCTION) == ['f', 'sq']
+    assert python_function_names(TEST_CODE_WITH_NESTED_FUNCTION, ignore_nested_functions=True) == ['f']
+
+
 def test_python_function_docstrings_1():
     code_text = '''def _test(a: str):
     """Docstring."""
     return a'''
     assert python_function_docstrings(code_text) == ['Docstring.']
     assert python_function_docstrings(code_text, ignore_private_functions=True) == []
+
+
+def test_python_function_docstrings__nested_functions():
+    assert python_function_docstrings(TEST_CODE_WITH_NESTED_FUNCTION) == ['a.', 'b.']
+    assert python_function_docstrings(TEST_CODE_WITH_NESTED_FUNCTION, ignore_nested_functions=True) == ['a.']
 
 
 def test_python_variable_names_1():
