@@ -173,25 +173,25 @@ def python_files_using_function(function_name: str, search_path: str) -> List[st
     return files_using_function
 
 
-def python_keywords(code_text: Optional[str] = None) -> List[str]:
+def python_keywords() -> List[str]:
     """Get a list of the python keywords."""
     import keyword
 
-    python_keywords = keyword.kwlist
+    return keyword.kwlist
 
-    if code_text is None:
-        return python_keywords
-    else:
-        from d8s_strings import string_words
+    # if code_text is None:
+    #     return python_keywords
+    # else:
+    #     from d8s_strings import string_words
 
-        words_in_code_text = string_words(code_text)
-        keywords_used = []
+    #     words_in_code_text = string_words(code_text)
+    #     keywords_used = []
 
-        for palabra in words_in_code_text:
-            if palabra in python_keywords:
-                keywords_used.append(palabra)
+    #     for palabra in words_in_code_text:
+    #         if palabra in python_keywords:
+    #             keywords_used.append(palabra)
 
-        return keywords_used
+        # return keywords_used
 
 
 # @decorators.map_first_arg
