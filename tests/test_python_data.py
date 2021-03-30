@@ -36,6 +36,8 @@ from d8s_python import (
     python_version,
 )
 
+from .test_ast_data import TEST_CODE_WITH_NESTED_FUNCTION
+
 PYTHON_FILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../d8s_python/python_data.py'))
 PYTHON_FILE_TEXT = file_read(PYTHON_FILE_PATH)
 SIMPLE_FUNCTION = '''def test(a) -> List:
@@ -264,6 +266,11 @@ def plural(word, count=None):
     assert results == ['test(a) -> List']
 
 
+def test_python_functions_signatures__ignore_nested_functions():
+    assert python_functions_signatures(TEST_CODE_WITH_NESTED_FUNCTION) == ['(n)', '(i)']
+    assert python_functions_signatures(TEST_CODE_WITH_NESTED_FUNCTION, ignore_nested_functions=True) == ['(n)']
+
+
 def test_python_traceback_prettify_docs_1():
     traceback = '''File "/app/.heroku/python/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner response = get_response(request) File "/app/.heroku/python/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response response = self.process_exception_by_middleware(e, request) File "/app/.heroku/python/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response response = wrapped_callback(request, *callback_args, **callback_kwargs)'''
     pretty_traceback = python_traceback_prettify(traceback)
@@ -424,6 +431,16 @@ def _a(
     print('foo')'''
     assert python_function_blocks(s) == [s]
     assert python_function_blocks(s, ignore_private_functions=True) == []
+
+
+def test_python_function_blocks__ignore_nested_function():
+    assert python_function_blocks(TEST_CODE_WITH_NESTED_FUNCTION) == [
+        'def f(n):\n    """a."""\n    def sq(i):\n        """b."""\n        return i * i\n    return sq(n)',
+        '    def sq(i):\n        """b."""\n        return i * i',
+    ]
+    assert python_function_blocks(TEST_CODE_WITH_NESTED_FUNCTION, ignore_nested_functions=True) == [
+        'def f(n):\n    """a."""\n    def sq(i):\n        """b."""\n        return i * i\n    return sq(n)'
+    ]
 
 
 def test_python_function_blocks_edge_cases_1():

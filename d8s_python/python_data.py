@@ -6,7 +6,11 @@ from typing import Any, Iterator, List, Union
 
 # @decorators.map_firstp_arg
 def python_functions_signatures(
-    code_text: str, *, ignore_private_functions: bool = False, keep_function_name: bool = False
+    code_text: str,
+    *,
+    ignore_private_functions: bool = False,
+    ignore_nested_functions: bool = False,
+    keep_function_name: bool = False,
 ) -> List[str]:
     """Return the function signatures for all of the functions in the given code_text."""
     from d8s_strings import string_remove_from_start
@@ -15,7 +19,9 @@ def python_functions_signatures(
 
     signatures = []
 
-    function_names = python_function_names(code_text, ignore_private_functions=ignore_private_functions)
+    function_names = python_function_names(
+        code_text, ignore_private_functions=ignore_private_functions, ignore_nested_functions=ignore_nested_functions
+    )
 
     for name in function_names:
         regex_for_signature = fr'(def {name}\((?:.|\s)*?\).*?):'
@@ -88,7 +94,9 @@ def python_clean(code_text: str) -> str:
     return code_text
 
 
-def python_function_blocks(code_text: str, *, ignore_private_functions: bool = False) -> List[str]:
+def python_function_blocks(
+    code_text: str, *, ignore_private_functions: bool = False, ignore_nested_functions: bool = False
+) -> List[str]:
     """Find the code (as a string) for every function in the given code_text."""
     from d8s_lists import has_index
     from d8s_strings import string_chars_at_start_len
@@ -97,7 +105,7 @@ def python_function_blocks(code_text: str, *, ignore_private_functions: bool = F
 
     function_block_strings = []
     code_text_as_lines = code_text.splitlines()
-    ast_function_defs = python_ast_function_defs(code_text)
+    ast_function_defs = python_ast_function_defs(code_text, recursive_search=not ignore_nested_functions)
     function_block_line_numbers = [(f.name, python_ast_object_line_numbers(f)) for f in ast_function_defs]
 
     for function_name, (start, end) in function_block_line_numbers:
