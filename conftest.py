@@ -24,7 +24,7 @@ def pytest_assertrepr_compare(config, op: str, left: object, right: object):
 
 def _update_test(file_path: str, function_name: str, new_assertion_value: Any) -> bool:
     """Update the test with the given function_name in the file at the given file_path with the new_assertion_value."""
-    from python_data import python_function_blocks
+    from d8s_python import python_function_blocks
 
     test_file_content = file_read(file_path)
     original_function_block = function_block = [
@@ -37,7 +37,7 @@ def _update_test(file_path: str, function_name: str, new_assertion_value: Any) -
 
 def _update_test_with_error(file_path: str, function_name: str, error_type: str, erroneous_assertion: str) -> bool:
     """Update the test with the given function_name in the file at the given file_path with the new_assertion_value."""
-    from python_data import python_function_blocks
+    from d8s_python import python_function_blocks
 
     test_file_content = file_read(file_path)
     original_function_block = function_block = [
