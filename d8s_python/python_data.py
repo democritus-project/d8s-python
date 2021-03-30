@@ -1,16 +1,14 @@
 import argparse
 import re
 import sys
-import traceback
-from typing import Any, Iterator, List, Optional, Union
+from typing import Any, Iterator, List, Union
 
 
-# TODO: for this function, I would like to have a decorator that splits the given code_text into code blocks for each function and then creates a sig for each of them
 # @decorators.map_firstp_arg
 def python_functions_signatures(
     code_text: str, *, ignore_private_functions: bool = False, keep_function_name: bool = False
 ) -> List[str]:
-    """Return the function signatures (the parameters and their types/default values) for all of the functions in the given code_text."""
+    """Return the function signatures for all of the functions in the given code_text."""
     from d8s_strings import string_remove_from_start
 
     from .ast_data import python_function_names
@@ -20,7 +18,7 @@ def python_functions_signatures(
     function_names = python_function_names(code_text, ignore_private_functions=ignore_private_functions)
 
     for name in function_names:
-        regex_for_signature = f'(def {name}\((?:.|\s)*?\).*?):'
+        regex_for_signature = fr'(def {name}\((?:.|\s)*?\).*?):'
         sig = re.findall(regex_for_signature, code_text)
         if any(sig):
             new_sig = string_remove_from_start(sig[0], 'def ')
@@ -43,7 +41,10 @@ def python_todos(code_text: str, todo_regex: str = 'TODO:.*') -> List[str]:
 
 # @decorators.map_first_arg
 def python_make_pythonic(name: str) -> str:
-    """Make the name pythonic (e.g. 'fooBar' => 'foo_bar', 'foo-bar' => 'foo_bar', 'foo bar' => 'foo_bar', 'Foo Bar' => 'foo_bar')."""
+    """Make the name pythonic.
+
+    (e.g. 'fooBar' => 'foo_bar', 'foo-bar' => 'foo_bar', 'foo bar' => 'foo_bar', 'Foo Bar' => 'foo_bar').
+    """
     from d8s_strings import lowercase, snake_case, string_split_on_uppercase
 
     split_string = '_'.join(
@@ -191,7 +192,7 @@ def python_keywords() -> List[str]:
     #         if palabra in python_keywords:
     #             keywords_used.append(palabra)
 
-        # return keywords_used
+    # return keywords_used
 
 
 # @decorators.map_first_arg
@@ -207,17 +208,17 @@ def python_object_properties_enumerate(
         string_to_eval_as_property = 'python_object.{}'.format(i)
         try:
             if run_methods:
-                eval_result = eval(string_to_eval_as_property)
+                eval_result = eval(string_to_eval_as_property)  # pylint: disable=W0123
                 if callable(eval_result):
                     string_to_eval_as_function = 'python_object.{}()'.format(i)
                     try:
-                        print(f'{i}: {eval(string_to_eval_as_function)}')
+                        print(f'{i}: {eval(string_to_eval_as_function)}')  # pylint: disable=W0123
                     except TypeError:
-                        print(f'{i}: {eval(string_to_eval_as_property)}')
+                        print(f'{i}: {eval(string_to_eval_as_property)}')  # pylint: disable=W0123
                 else:
                     print(f'{i}: {eval_result}')
             else:
-                print(f'{i}: {eval(string_to_eval_as_property)}')
+                print(f'{i}: {eval(string_to_eval_as_property)}')  # pylint: disable=W0123
         except AttributeError:
             print(f'! Unable to get the {i} attribute for the item.')
 

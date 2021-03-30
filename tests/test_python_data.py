@@ -2,13 +2,12 @@ import inspect
 import os
 
 import pytest
-from d8s_file_system import directory_create, directory_delete, file_name, file_read, file_write
+from d8s_file_system import directory_create, directory_delete, file_read, file_write
 
 from d8s_python import (
     python_clean,
     python_code_details,
     python_copy_deep,
-    python_copy_shallow,
     python_disassemble,
     python_file_names,
     python_files_using_function,
@@ -34,7 +33,6 @@ from d8s_python import (
     python_todos,
     python_traceback_prettify,
     python_traceback_pretty_print,
-    python_type_name,
     python_version,
 )
 
@@ -220,7 +218,7 @@ def test_python_object_doc_string_docs_1():
         return 1
 
     result = python_object_doc_string(a)
-    assert result == None
+    assert result is None
 
 
 def test_python_functions_signatures_docs_1():
@@ -357,11 +355,11 @@ def test_python_files_using_function_docs_1():
 
 
 def test_python_is_version_2_docs_1():
-    assert python_is_version_2() == False
+    assert not python_is_version_2()
 
 
 def test_python_is_version_3_docs_1():
-    assert python_is_version_3() == True
+    assert python_is_version_3()
 
 
 def test_python_keywords_docs_1():
@@ -370,8 +368,8 @@ def test_python_keywords_docs_1():
     # assert python_keywords(code_text=SIMPLE_FUNCTION) == ['def', 'return']
 
 
-def test_python_object_properties_enumerate_docs_1():
-    assert python_object_properties_enumerate('foo') == None
+def test_python_object_properties_enumerate_docs__no_properties():
+    assert python_object_properties_enumerate('foo') is None
 
 
 def test_python_function_blocks_1():

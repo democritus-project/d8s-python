@@ -1,7 +1,4 @@
 import ast
-import os
-
-from d8s_file_system import file_read
 
 from d8s_python import (
     python_ast_exception_handler_exceptions_raised,

@@ -8,10 +8,10 @@ include_trailing_comma = true
 
 [tool.pylint."MESSAGES CONTROL"]
 max-line-length = 120
-disable = "C0114, R1705, C0103"
+disable = "C0114, R1705, C0103, C0415, R1710"
 
 [tool.pytest.ini_options]
-addopts = "-v --cov=. --cov-report term-missing --cov-fail-under 90"
+addopts = "-v --cov=. --cov-report term-missing --cov-fail-under 95"
 python_files = "tests/test_*.py"
 
 [build-system]
