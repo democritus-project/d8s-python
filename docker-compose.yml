@@ -8,18 +8,26 @@ services:
       context: .
     volumes:
       - ./:/code
+
+  _bump-base:
+    &bump-base
+    build:
+      dockerfile: bumpversion.dockerfile
+      context: .
+    volumes:
+      - ./:/code
       - ~/.gitconfig:/root/.gitconfig
 
   bump-patch:
-    <<: *base
+    <<: *bump-base
     command: bumpversion patch
 
   bump-minor:
-    <<: *base
+    <<: *bump-base
     command: bumpversion minor
 
   bump-major:
-    <<: *base
+    <<: *bump-base
     command: bumpversion major
 
   # a fully loaded development environment to test new code
