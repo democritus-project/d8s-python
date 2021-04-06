@@ -386,6 +386,8 @@ def test_python_function_names_1():
     assert python_function_names(TEST_CODE_WITH_PRIVATE_FUNCTION) == ['_test']
     assert python_function_names(TEST_CODE_WITH_PRIVATE_FUNCTION, ignore_private_functions=True) == []
 
+    ast.AsyncFunctionDef
+
 
 def test_python_function_names__nested_functions():
     assert python_function_names(TEST_CODE_WITH_NESTED_FUNCTION) == ['f', 'sq']

@@ -450,7 +450,7 @@ def test_python_function_blocks_edge_cases_1():
         return (
             n * 2
         )
-        
+
     return b(
         1
     )'''

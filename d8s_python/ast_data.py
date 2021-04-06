@@ -1,5 +1,4 @@
 import ast
-import sys
 from typing import Iterable, List, Optional, Tuple, Union
 
 import more_itertools
@@ -18,7 +17,7 @@ def _python_ast_exception_name(node: Union[ast.Raise, ast.ExceptHandler]) -> str
             return node.exc.id
         elif hasattr(
             node.exc.func, 'id'
-        ):  # this handles ast.Raise nodes where the exception being raised is an ast.Call (e.g. "ValueError('Foo Bar')")
+        ):  # handles ast.Raise nodes where the exception being raised is an ast.Call (e.g. "ValueError('Foo Bar')")
             return node.exc.func.id
         elif hasattr(
             node.exc.func, 'attr'
@@ -92,7 +91,8 @@ def python_exceptions_raised(code_text: str) -> Iterable[str]:
     ast_except_handlers = python_ast_objects_of_type(parsed_code, ast.ExceptHandler)
     exceptions = list(map(python_ast_exception_handler_exceptions_raised, ast_except_handlers))
 
-    # remove all of the ast.ExceptHandlers so exceptions are not parsed twice (once from the code above and once in the code below)
+    # remove all of the ast.ExceptHandlers so exceptions are not parsed twice...
+    # (once from the code above and once in the code below)
     nodes = python_ast_objects_not_of_type(parsed_code, ast.ExceptHandler)
     exceptions.extend(list(map(python_ast_raise_name, (node for node in nodes if isinstance(node, ast.Raise)))))
 
@@ -193,7 +193,6 @@ def python_ast_objects_not_of_type(code_text_or_ast_object: Union[str, object], 
 
 def python_ast_parse(code_text: str) -> ast.Module:
     """."""
-    # TODO: not sure if this is the right thing to do, but I am cleaning the text before parsing; may want to do this only after I try to parse it without modification the first time
     _python_ast_clean(code_text)
     parsed_code = ast.parse(code_text)
     return parsed_code

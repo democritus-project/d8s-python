@@ -116,7 +116,10 @@ def python_function_blocks(
             if function_name.startswith('_'):
                 continue
 
-        # the code below checks to see if the line after what was determined to be the last line of the function should also be included in the function block (which is the case when the closing parenthesis of a function call in another function is on a newline (see the python_data_tests.py::test_python_function_blocks_edge_cases_1 for an example))
+        # the code below checks to see if the line after what was determined to be the last line of the function...
+        # should also be included in the function block (which is the case when the closing parenthesis of a...
+        # function call in another function is on a newline (see the...
+        # python_data_tests.py::test_python_function_blocks_edge_cases_1 for an example))
         if has_index(code_text_as_lines, end):
             # find the indentation level of the function definition (the first line of the function)
             function_indentation = string_chars_at_start_len(function_block_lines[0], ' ')
@@ -172,7 +175,6 @@ def python_files_using_function(function_name: str, search_path: str) -> List[st
 
     files_using_function = []
 
-    # TODO: this function will return the function definition as well as any uses - I would like to split these two things up
     function_pattern = f'{function_name}('
     python_files = directory_read_files_with_path_matching(search_path, '*.py')
     for file_path, file_contents in python_files:
@@ -266,7 +268,10 @@ def python_file_names(path: str, *, exclude_tests: bool = False) -> List[str]:
 
 # @decorators.map_first_arg
 def python_fstrings(code_text: str, *, include_braces: bool = False) -> Iterator[str]:
-    """Find all of the python formatted string literals in the given text. See https://realpython.com/python-f-strings/ for more details about f-strings."""
+    """Find all of the python formatted string literals in the given text.
+
+    See https://realpython.com/python-f-strings/ for more details about f-strings.
+    """
     from d8s_grammars import python_formatted_string_literal
     from d8s_lists import flatten
 
