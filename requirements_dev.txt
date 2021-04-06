@@ -9,4 +9,3 @@ pylint
 pytest
 pytest-cov
 bump2version
-d8s-python==0.*
