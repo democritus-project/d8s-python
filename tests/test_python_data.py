@@ -36,7 +36,7 @@ from d8s_python import (
     python_version,
 )
 
-from .test_ast_data import TEST_CODE_WITH_NESTED_FUNCTION
+from .test_ast_data import TEST_CODE_WITH_ASYNC_FUNCTION, TEST_CODE_WITH_NESTED_FUNCTION
 
 PYTHON_FILE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../d8s_python/python_data.py'))
 PYTHON_FILE_TEXT = file_read(PYTHON_FILE_PATH)
@@ -455,7 +455,7 @@ def test_python_function_blocks_edge_cases_1():
         1
     )'''
     assert python_function_blocks(s) == [
-        'def a():\n    def b(n):\n        return (\n            n * 2\n        )\n        \n    return b(\n        1\n    )',
+        'def a():\n    def b(n):\n        return (\n            n * 2\n        )\n\n    return b(\n        1\n    )',
         '    def b(n):\n        return (\n            n * 2\n        )',
     ]
 
@@ -473,3 +473,10 @@ def test_python_function_blocks_edge_cases_1():
     "bar"'''
     print(f'python_function_blocks(s): {python_function_blocks(s)}')
     assert python_function_blocks(s) == ['def a():\n    return "foo" +    "bar"']
+
+
+def test_python_function_blocks__async_functions():
+    assert python_function_blocks(TEST_CODE_WITH_ASYNC_FUNCTION) == [
+        'def foo(n):\n    """Foo."""\n    return n',
+        'async def bar(n):\n    """Some async func."""\n    return n',
+    ]

@@ -200,8 +200,8 @@ def python_ast_parse(code_text: str) -> ast.Module:
 
 def python_ast_function_defs(code_text: str, recursive_search: bool = True) -> Iterable[ast.FunctionDef]:
     """."""
-    function_defs = python_ast_objects_of_type(code_text, ast.FunctionDef, recursive_search=recursive_search)
-    return function_defs
+    yield from python_ast_objects_of_type(code_text, ast.FunctionDef, recursive_search=recursive_search)
+    yield from python_ast_objects_of_type(code_text, ast.AsyncFunctionDef, recursive_search=recursive_search)
 
 
 def python_function_arguments(function_text: str) -> List[ast.arg]:

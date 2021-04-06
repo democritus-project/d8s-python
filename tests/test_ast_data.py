@@ -27,6 +27,7 @@ async def foo():
     """."""
     print('Here!')
 
+
 def python_function_names(code_text: str, *, ignore_private_functions: bool = False) -> List[str]:
     """."""
     function_objects = python_ast_function_defs(code_text)
@@ -98,6 +99,17 @@ def f(n):
         """b."""
         return i * i
     return sq(n)
+'''
+
+TEST_CODE_WITH_ASYNC_FUNCTION = '''
+def foo(n):
+    """Foo."""
+    return n
+
+
+async def bar(n):
+    """Some async func."""
+    return n
 '''
 
 TEST_EXCEPTION_DATA = [
@@ -308,10 +320,9 @@ def test_python_exceptions_raised_docs_1():
 
 
 def test_python_functions_as_import_string_1():
-    print(python_functions_as_import_string(TEST_CODE, 'ast_data'))
     assert (
         python_functions_as_import_string(TEST_CODE, 'ast_data')
-        == 'from ast_data import (\n    python_function_names,\n    python_function_docstrings,\n    python_variable_names,\n    python_constants,\n)'
+        == 'from ast_data import (\n    python_function_names,\n    python_function_docstrings,\n    python_variable_names,\n    python_constants,\n    foo,\n)'
     )
 
 
@@ -382,16 +393,19 @@ def test_python_function_names_1():
         'python_function_docstrings',
         'python_variable_names',
         'python_constants',
+        'foo',
     ]
     assert python_function_names(TEST_CODE_WITH_PRIVATE_FUNCTION) == ['_test']
     assert python_function_names(TEST_CODE_WITH_PRIVATE_FUNCTION, ignore_private_functions=True) == []
-
-    ast.AsyncFunctionDef
 
 
 def test_python_function_names__nested_functions():
     assert python_function_names(TEST_CODE_WITH_NESTED_FUNCTION) == ['f', 'sq']
     assert python_function_names(TEST_CODE_WITH_NESTED_FUNCTION, ignore_nested_functions=True) == ['f']
+
+
+def test_python_function_names__async_functions():
+    assert python_function_names(TEST_CODE_WITH_ASYNC_FUNCTION) == ['foo', 'bar']
 
 
 def test_python_function_docstrings_1():
@@ -405,6 +419,10 @@ def test_python_function_docstrings_1():
 def test_python_function_docstrings__nested_functions():
     assert python_function_docstrings(TEST_CODE_WITH_NESTED_FUNCTION) == ['a.', 'b.']
     assert python_function_docstrings(TEST_CODE_WITH_NESTED_FUNCTION, ignore_nested_functions=True) == ['a.']
+
+
+def test_python_function_docstrings__async_functions():
+    assert python_function_docstrings(TEST_CODE_WITH_ASYNC_FUNCTION) == ['Foo.', 'Some async func.']
 
 
 def test_python_variable_names_1():
