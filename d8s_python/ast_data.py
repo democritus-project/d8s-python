@@ -263,7 +263,8 @@ def python_function_docstrings(
 
 def python_variable_names(code_text: str) -> List[str]:
     """Get all of the variables names in the code_text."""
-    # TODO: add a caveat that this function will only find *stored* variables and not those which are referenced or loaded. E.g., given "x = y + 1", this function will return ["x"]; note that "y" is not included
+    # TODO: add a caveat that this function will only find *stored* variables and not those which are referenced or...
+    # loaded. E.g., given "x = y + 1", this function will return ["x"]; note that "y" is not included
     parsed_code = python_ast_parse(code_text)
     variable_names = [
         node.id for node in ast.walk(parsed_code) if isinstance(node, ast.Name) and (isinstance(node.ctx, ast.Store))

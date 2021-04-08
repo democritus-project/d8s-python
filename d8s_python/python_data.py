@@ -109,7 +109,7 @@ def python_function_blocks(
     function_block_line_numbers = [(f.name, python_ast_object_line_numbers(f)) for f in ast_function_defs]
 
     for function_name, (start, end) in function_block_line_numbers:
-        function_block_lines = code_text_as_lines[start - 1 : end]
+        function_block_lines = code_text_as_lines[start - 1 : end]  # noqa=E203
         function_block_string = '\n'.join(function_block_lines)
 
         if ignore_private_functions:

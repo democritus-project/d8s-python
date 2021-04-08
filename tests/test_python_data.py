@@ -226,7 +226,7 @@ def test_python_object_doc_string_docs_1():
 def test_python_functions_signatures_docs_1():
     s = '''def string_remove_numbers(input_string: str, replacement: str = ' ') -> str:
     """Remove all numbers from the input_strings."""
-    new_string_without_numbers = replace('\d+', replacement, input_string)
+    new_string_without_numbers = replace('\\d+', replacement, input_string)
     return new_string_without_numbers'''
     results = python_functions_signatures(s)
     print(f'results {results} ')
