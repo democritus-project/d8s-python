@@ -262,9 +262,8 @@ def test_python_ast_exception_handler_exceptions_raised_1():
 
 def test_python_ast_objects_not_of_type_docs_1():
     # make sure that any ast.FunctionDef objects *and* their children are not returned
-    result = python_ast_objects_not_of_type(TEST_CODE_1, ast.FunctionDef)
+    result = tuple(python_ast_objects_not_of_type(TEST_CODE_1, ast.FunctionDef))
     assert len(result) == 35
-    assert isinstance(result, list)
 
 
 def test_python_ast_objects_of_type_1():

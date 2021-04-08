@@ -2,8 +2,7 @@ import ast
 from typing import Iterable, List, Optional, Tuple, Union
 
 import more_itertools
-
-from .ast_data_temp_utils import list_delete_empty_items, list_replace
+from d8s_lists import iterable_replace, truthy_items
 
 # TODO: all of these functions where code_text is given should also be able to read a file at a given path (?)
 
@@ -66,11 +65,11 @@ def python_ast_exception_handler_exceptions_raised(handler: ast.ExceptHandler) -
             exceptions_names = list(map(python_ast_raise_name, raise_nodes))
             for name in exceptions_names:
                 if name and name == handler.name:
-                    exceptions_names = list_replace(
+                    exceptions_names = iterable_replace(
                         exceptions_names, name, python_ast_exception_handler_exceptions_handled(handler)
                     )
                 elif name is None:
-                    exceptions_names = list_replace(
+                    exceptions_names = iterable_replace(
                         exceptions_names, name, python_ast_exception_handler_exceptions_handled(handler)
                     )
             yield from more_itertools.collapse(exceptions_names, base_type=str)
@@ -126,9 +125,13 @@ def python_ast_object_line_numbers(ast_object: object) -> Tuple[int, int]:
     """."""
     from d8s_algorithms import depth_first_traverse
 
-    line_numbers = list_delete_empty_items(
-        list(
-            depth_first_traverse(ast_object, ast.iter_child_nodes, collect_items_function=python_ast_object_line_number)
+    line_numbers = tuple(
+        truthy_items(
+            list(
+                depth_first_traverse(
+                    ast_object, ast.iter_child_nodes, collect_items_function=python_ast_object_line_number
+                )
+            )
         )
     )
     return min(line_numbers), max(line_numbers)
@@ -170,7 +173,7 @@ def python_ast_objects_not_of_type(code_text_or_ast_object: Union[str, object], 
     else:
         parsed_code = code_text_or_ast_object
 
-    ast_objects_not_of_type = list_delete_empty_items(
+    ast_objects_not_of_type = truthy_items(
         list(
             depth_first_traverse(
                 parsed_code,
