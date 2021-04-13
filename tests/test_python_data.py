@@ -358,7 +358,9 @@ def test_python_file_names_docs_1():
 
 def test_python_files_using_function_docs_1():
     results = python_files_using_function('python_files_using_function', os.path.dirname(__file__))
-    assert results == ['/code/tests/test_python_data.py']
+    LOCAL_DOCKER_PATH = '/code/tests/test_python_data.py'
+    GITHUB_ACTIONS_PATH = '/home/runner/work/d8s-python/d8s-python/tests/test_python_data.py'
+    assert results == [LOCAL_DOCKER_PATH] or [GITHUB_ACTIONS_PATH]
 
 
 def test_python_is_version_2_docs_1():
