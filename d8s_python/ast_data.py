@@ -196,8 +196,11 @@ def python_ast_objects_not_of_type(code_text_or_ast_object: Union[str, object], 
 
 def python_ast_parse(code_text: str) -> ast.Module:
     """."""
-    _python_ast_clean(code_text)
-    parsed_code = ast.parse(code_text)
+    try:
+        parsed_code = ast.parse(code_text)
+    except Exception:  # pylint: disable=W0703
+        code_text = _python_ast_clean(code_text)
+        parsed_code = ast.parse(code_text)
     return parsed_code
 
 

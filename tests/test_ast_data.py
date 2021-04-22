@@ -334,6 +334,12 @@ def test_python_ast_parse_1():
     assert isinstance(result, ast.Module)
 
 
+def test_python_ast_parse__code_has_newlines():
+    code_string = '''print("foo")\nprint("bar")'''
+    result = python_ast_parse(code_string)
+    assert isinstance(result, ast.Module)
+
+
 def test_python_ast_function_defs_1():
     result = tuple(python_ast_function_defs(TEST_FUNCTION_WITH_DEFAULT))
     assert len(result) == 1

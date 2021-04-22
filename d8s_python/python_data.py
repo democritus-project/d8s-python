@@ -347,7 +347,7 @@ def python_object_signature(python_object: Any) -> str:
 # TODO: improve the type annotations to be lists of types
 def python_sort_type_list_by_name(python_type_list: List[type], **kwargs) -> List[type]:
     """."""
-    return sorted(python_type_list, key=lambda x: python_type_name(x), **kwargs)
+    return sorted(python_type_list, key=lambda x: python_type_name(x), **kwargs)  # pylint: disable=W0108
 
 
 # @decorators.map_first_arg
