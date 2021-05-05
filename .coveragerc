@@ -1,6 +1,5 @@
 [run]
 omit =
-    .tox/*
     tests/*
     setup.py
     conftest.py
