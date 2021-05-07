@@ -14,6 +14,16 @@ Democritus functions<sup>[1]</sup> for working with Python data (code and ASTs).
 
 We use `d8s` (pronounced "dee-eights") as an abbreviation for `democritus` (you can read more about this [here](https://github.com/democritus-project/roadmap#what-is-d8s)).
 
+## Usage
+
+You import the library like:
+
+```python
+from d8s_python import *
+```
+
+Once imported, you can use any of the functions listed below.
+
 ## Functions
 
   - ```python
