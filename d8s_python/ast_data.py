@@ -7,7 +7,7 @@ from d8s_lists import iterable_replace, truthy_items
 # TODO: all of these functions where code_text is given should also be able to read a file at a given path (?)
 
 
-def _python_ast_exception_name(node: Union[ast.Raise, ast.ExceptHandler]) -> str:
+def _python_ast_exception_name(node: Union[ast.Raise, ast.ExceptHandler]) -> str:  # noqa: CCR001
     """."""
     if hasattr(node, 'exc') and node.exc:  # this handles ast.Raise nodes
         if hasattr(
@@ -41,38 +41,34 @@ def _python_ast_exception_name(node: Union[ast.Raise, ast.ExceptHandler]) -> str
 
 def python_ast_raise_name(node: ast.Raise) -> Optional[str]:
     """Get the name of the exception raise by the given ast.Raise object."""
-    if isinstance(node, ast.Raise):
-        return _python_ast_exception_name(node)
+    return _python_ast_exception_name(node)
 
 
 def python_ast_exception_handler_exceptions_handled(handler: ast.ExceptHandler) -> Optional[Iterable[str]]:
     """Return all of the exceptions handled by the given exception handler."""
-    if isinstance(handler, ast.ExceptHandler):
-        handler_has_multiple_exceptions = handler.type and hasattr(handler.type, 'elts')
-        if handler_has_multiple_exceptions:
-            yield from (_python_ast_exception_name(i) for i in handler.type.elts)
-        else:
-            exception_name = _python_ast_exception_name(handler)
-            if exception_name:
-                yield exception_name
+    handler_has_multiple_exceptions = handler.type and hasattr(handler.type, 'elts')
+    if handler_has_multiple_exceptions:
+        yield from (_python_ast_exception_name(i) for i in handler.type.elts)
+    else:
+        exception_name = _python_ast_exception_name(handler)
+        if exception_name:
+            yield exception_name
 
 
 def python_ast_exception_handler_exceptions_raised(handler: ast.ExceptHandler) -> Optional[Iterable[str]]:
     """Return the exception raised by the given exception handler."""
-    if isinstance(handler, ast.ExceptHandler):
-        raise_nodes = list(python_ast_objects_of_type(handler, ast.Raise))
-        if any(raise_nodes):
-            exceptions_names = list(map(python_ast_raise_name, raise_nodes))
-            for name in exceptions_names:
-                if name and name == handler.name:
-                    exceptions_names = iterable_replace(
-                        exceptions_names, name, python_ast_exception_handler_exceptions_handled(handler)
-                    )
-                elif name is None:
-                    exceptions_names = iterable_replace(
-                        exceptions_names, name, python_ast_exception_handler_exceptions_handled(handler)
-                    )
-            yield from more_itertools.collapse(exceptions_names, base_type=str)
+    raise_nodes = python_ast_objects_of_type(handler, ast.Raise)
+    exceptions_names = list(map(python_ast_raise_name, raise_nodes))
+    for name in exceptions_names:
+        if name and name == handler.name:
+            exceptions_names = iterable_replace(
+                exceptions_names, name, python_ast_exception_handler_exceptions_handled(handler)
+            )
+        elif name is None:
+            exceptions_names = iterable_replace(
+                exceptions_names, name, python_ast_exception_handler_exceptions_handled(handler)
+            )
+    yield from more_itertools.collapse(exceptions_names, base_type=str)
 
 
 def python_exceptions_handled(code_text: str) -> Iterable[str]:
@@ -145,7 +141,7 @@ def _python_ast_clean(code_text: str) -> str:
 
 
 # TODO: have a decorator to parse a first argument that is a string
-def python_ast_objects_of_type(
+def python_ast_objects_of_type(  # noqa: CCR001
     code_text_or_ast_object: Union[str, object], ast_type: type, *, recursive_search: bool = True
 ) -> Iterable[object]:
     """Return all of the ast objects of the given ast_type in the code_text_or_ast_object."""

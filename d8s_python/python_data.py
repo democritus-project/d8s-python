@@ -94,7 +94,7 @@ def python_clean(code_text: str) -> str:
     return code_text
 
 
-def python_function_blocks(
+def python_function_blocks(  # noqa: CCR001
     code_text: str, *, ignore_private_functions: bool = False, ignore_nested_functions: bool = False
 ) -> List[str]:
     """Find the code (as a string) for every function in the given code_text."""
@@ -206,7 +206,7 @@ def python_keywords() -> List[str]:
 
 
 # @decorators.map_first_arg
-def python_object_properties_enumerate(
+def python_object_properties_enumerate(  # noqa: CCR001
     python_object: Any, *, run_methods: bool = True, internal_properties: bool = True
 ) -> None:
     """Enumerate and print out the properties of the given object."""
@@ -248,7 +248,7 @@ def python_copy_shallow(python_object: Any) -> Any:
 
 
 # @decorators.map_first_arg
-def python_file_names(path: str, *, exclude_tests: bool = False) -> List[str]:
+def python_file_names(path: str, *, exclude_tests: bool = False) -> List[str]:  # noqa: CCR001
     """Find all python files in the given directory."""
     from d8s_file_system import directory_file_names_matching
 
