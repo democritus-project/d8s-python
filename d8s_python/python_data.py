@@ -248,22 +248,19 @@ def python_copy_shallow(python_object: Any) -> Any:
 
 
 # @decorators.map_first_arg
-def python_file_names(path: str, *, exclude_tests: bool = False) -> List[str]:  # noqa: CCR001
+def python_file_names(path: str, *, exclude_tests: bool = False, recursive: bool = False) -> List[str]:  # noqa: CCR001
     """Find all python files in the given directory."""
-    from d8s_file_system import directory_file_names_matching
 
-    files = directory_file_names_matching(path, '*.py')
+    from pathlib import Path
+    if recursive:
+        files = Path(path).glob('**/*.py')
+    else:
+        files = Path(path).glob('*.py')
 
     if not exclude_tests:
-        return files
+        return list(files)
     else:
-        non_test_files = []
-
-        for file in files:
-            if '_test' not in file and 'test_' not in file:
-                non_test_files.append(file)
-
-        return non_test_files
+        return [ file for file in files if 'test' not in file ]
 
 
 # @decorators.map_first_arg
