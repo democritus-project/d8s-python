@@ -1,7 +1,10 @@
 import argparse
 import re
 import sys
-from typing import Any, Iterator, List, Union
+from ast import Import, ImportFrom
+from typing import Any, Dict, Iterator, List, Union
+
+from .ast_data import python_ast_objects_of_type
 
 
 # @decorators.map_firstp_arg
@@ -359,3 +362,44 @@ def python_type_name(python_type: type) -> str:
 def python_object_type_to_word(python_object: Any) -> str:
     """Convert the given python type to a string."""
     return python_type_name(type(python_object))
+
+
+def _get_importfrom_module_name(node: ImportFrom) -> str:
+    """Extract the module name from an ast.ImportFrom node.
+
+    The module name on the ast.ImportFrom node can be None for relative imports
+    In this case, this function will return the name as the dots from the import statement.
+    A few examples:
+    "from requests import get" -> "get"
+    "from . import *" -> "."
+    "from .. import *" -> ".."
+    "from .foo import bar" -> "foo"
+    """
+    if node.module is None:
+        module_name = "." * node.level
+    else:
+        module_name = node.module
+
+    return module_name
+
+
+def python_package_imports(code: str) -> Dict[str, List[str]]:
+    """Return a dictionary containing the names of all imported modules."""
+    # Start with the Import nodes.
+    # These will always have an empty list of submodules
+    # so we can just overwrite them without losing any data
+    modules = dict()
+    nodes = python_ast_objects_of_type(code, Import)
+    for node in nodes:
+        for alias in node.names:
+            modules[alias.name] = []
+
+    # Now for the ImportFrom nodes
+    importfrom_nodes = python_ast_objects_of_type(code, ImportFrom)
+    for node in importfrom_nodes:
+        module_name = _get_importfrom_module_name(node)
+
+        for alias in node.names:
+            modules.setdefault(module_name, []).append(alias.name)
+
+    return modules

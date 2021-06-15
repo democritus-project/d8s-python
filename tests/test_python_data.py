@@ -28,6 +28,7 @@ from d8s_python import (
     python_object_source_code,
     python_object_source_file,
     python_object_type_to_word,
+    python_package_imports,
     python_sort_type_list_by_name,
     python_stack_local_data,
     python_todos,
@@ -482,3 +483,34 @@ def test_python_function_blocks__async_functions():
         'def foo(n):\n    """Foo."""\n    return n',
         'async def bar(n):\n    """Some async func."""\n    return n',
     ]
+
+
+def test_python_package_imports():
+    s = ''
+    assert python_package_imports(s) == {}
+
+    s = '''import requests'''
+    assert python_package_imports(s) == {'requests': []}
+
+    s = '''from math import sqrt'''
+    assert python_package_imports(s) == {'math': ['sqrt']}
+
+    s = '''
+import os as _
+import sys,random'''
+    assert python_package_imports(s) == {'os': [], 'sys': [], 'random': []}
+
+    s = '''
+from democritus_dates import date_parse, date_now
+import requests
+
+print(date_parse('2 days from now'))
+    '''
+    assert python_package_imports(s) == {'democritus_dates': ['date_parse', 'date_now'], 'requests': []}
+
+    s = '''
+from . import everything
+from ..foo.bar import *
+    '''
+
+    assert python_package_imports(s) == {'.': ['everything'], 'foo.bar': ['*']}
