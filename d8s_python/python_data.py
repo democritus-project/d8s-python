@@ -370,7 +370,7 @@ def _get_importfrom_module_name(node: ImportFrom) -> str:
     The module name on the ast.ImportFrom node can be None for relative imports
     In this case, this function will return the name as the dots from the import statement.
     A few examples:
-    "from requests import get" -> "get"
+    "from requests import get" -> "requests"
     "from . import *" -> "."
     "from .. import *" -> ".."
     "from .foo import bar" -> "foo"
