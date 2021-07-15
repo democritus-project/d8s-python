@@ -253,9 +253,12 @@ def python_copy_shallow(python_object: Any) -> Any:
 # @decorators.map_first_arg
 def python_file_names(path: str, *, exclude_tests: bool = False) -> List[str]:  # noqa: CCR001
     """Find all python files in the given directory."""
-    from d8s_file_system import directory_file_names_matching
+    # from d8s_file_system import directory_file_names_matching
+    #
+    # files = directory_file_names_matching(path, '*.py')
+    from pathlib import Path
 
-    files = directory_file_names_matching(path, '*.py')
+    files = Path(path).glob('*.py')
 
     if not exclude_tests:
         return files
