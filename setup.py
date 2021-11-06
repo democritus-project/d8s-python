@@ -2,14 +2,11 @@
 
 from setuptools import setup, find_packages
 
-with open('README.md') as readme_file:
-    readme = readme_file.read()
+with open('README.md') as readme_file: readme = readme_file.read()
 
-with open('requirements.txt') as requirements_file:
-    requirements = requirements_file.read().splitlines()
+with open('requirements.txt') as requirements_file: requirements = requirements_file.read().splitlines()
 
-with open('requirements_dev.txt') as requirements_dev_file:
-    test_requirements = requirements_dev_file.read().splitlines()
+with open('requirements_dev.txt') as requirements_dev_file:    test_requirements = requirements_dev_file.read().splitlines()
 
 setup(
     name='d8s_python',
