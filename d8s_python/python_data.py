@@ -27,22 +27,22 @@ def python_functions_signatures(
     )
 
     for name in function_names:
-        regex_for_signature = fr'(def {name}\((?:.|\s)*?\).*?):'
+        regex_for_signature = rf"(def {name}\((?:.|\s)*?\).*?):"
         sig = re.findall(regex_for_signature, code_text)
         if any(sig):
-            new_sig = string_remove_from_start(sig[0], 'def ')
+            new_sig = string_remove_from_start(sig[0], "def ")
             if not keep_function_name:
                 new_sig = string_remove_from_start(new_sig, name)
             signatures.append(new_sig)
         else:
-            message = f'Unable to find signature for the {name} function'
+            message = f"Unable to find signature for the {name} function"
             print(message)
             signatures.append(None)
 
     return signatures
 
 
-def python_todos(code_text: str, todo_regex: str = 'TODO:.*') -> List[str]:
+def python_todos(code_text: str, todo_regex: str = "TODO:.*") -> List[str]:
     """Return all todos in the given code_text that match the given todo_regex."""
     todos = re.findall(todo_regex, code_text)
     return todos
@@ -56,7 +56,7 @@ def python_make_pythonic(name: str) -> str:
     """
     from d8s_strings import lowercase, snake_case, string_split_on_uppercase
 
-    split_string = '_'.join(
+    split_string = "_".join(
         [
             string.strip()
             for string in string_split_on_uppercase(name, include_uppercase_characters=True, split_acronyms=False)
@@ -77,7 +77,7 @@ def python_namespace_has_argument(namespace: argparse.Namespace, argument_name: 
 # @decorators.map_first_arg
 def python_traceback_prettify(traceback: str) -> str:
     """Return a string with the given traceback pretty-printed."""
-    pretty_traceback = re.sub(' File ', '\nFile ', traceback)
+    pretty_traceback = re.sub(" File ", "\nFile ", traceback)
 
     return pretty_traceback
 
@@ -92,8 +92,8 @@ def python_traceback_pretty_print(traceback: str) -> None:
 # @decorators.map_first_arg
 def python_clean(code_text: str) -> str:
     """Clean python code as it is often found in documentation and snippets."""
-    code_text = code_text.replace('>>> ', '')
-    code_text = code_text.replace('... ', '')
+    code_text = code_text.replace(">>> ", "")
+    code_text = code_text.replace("... ", "")
     return code_text
 
 
@@ -113,10 +113,10 @@ def python_function_blocks(  # noqa: CCR001
 
     for function_name, (start, end) in function_block_line_numbers:
         function_block_lines = code_text_as_lines[start - 1 : end]  # noqa=E203
-        function_block_string = '\n'.join(function_block_lines)
+        function_block_string = "\n".join(function_block_lines)
 
         if ignore_private_functions:
-            if function_name.startswith('_'):
+            if function_name.startswith("_"):
                 continue
 
         # the code below checks to see if the line after what was determined to be the last line of the function...
@@ -125,15 +125,15 @@ def python_function_blocks(  # noqa: CCR001
         # python_data_tests.py::test_python_function_blocks_edge_cases_1 for an example))
         if has_index(code_text_as_lines, end):
             # find the indentation level of the function definition (the first line of the function)
-            function_indentation = string_chars_at_start_len(function_block_lines[0], ' ')
+            function_indentation = string_chars_at_start_len(function_block_lines[0], " ")
             # TODO: the check below assumes that spaces are used instead of tabs
             next_line_is_indented = (
-                code_text_as_lines[end].startswith(' ')
-                and string_chars_at_start_len(code_text_as_lines[end], ' ') > function_indentation
+                code_text_as_lines[end].startswith(" ")
+                and string_chars_at_start_len(code_text_as_lines[end], " ") > function_indentation
             )
-            next_line_has_only_parenthesis = code_text_as_lines[end].strip(' ') == ')'
+            next_line_has_only_parenthesis = code_text_as_lines[end].strip(" ") == ")"
             if next_line_is_indented and next_line_has_only_parenthesis:
-                function_block_string += f'\n{code_text_as_lines[end]}'
+                function_block_string += f"\n{code_text_as_lines[end]}"
         function_block_strings.append(function_block_string)
     return function_block_strings
 
@@ -157,12 +157,12 @@ def python_function_lengths(code_text: str) -> List[int]:
 
 def python_version() -> str:
     """Return the python version of the current environment."""
-    return '{}.{}.{}'.format(sys.version_info.major, sys.version_info.minor, sys.version_info.micro)
+    return "{}.{}.{}".format(sys.version_info.major, sys.version_info.minor, sys.version_info.micro)
 
 
 def python_is_version_2() -> bool:
     """Return whether or not the python version of the current environment is v2.x."""
-    return python_version().startswith('2.')
+    return python_version().startswith("2.")
 
 
 def python_is_version_3() -> bool:
@@ -178,8 +178,8 @@ def python_files_using_function(function_name: str, search_path: str) -> List[st
 
     files_using_function = []
 
-    function_pattern = f'{function_name}('
-    python_files = directory_read_files_with_path_matching(search_path, '*.py')
+    function_pattern = f"{function_name}("
+    python_files = directory_read_files_with_path_matching(search_path, "*.py")
     for file_path, file_contents in python_files:
         if function_pattern in file_contents:
             files_using_function.append(file_path)
@@ -191,7 +191,7 @@ def python_keywords() -> List[str]:
     """Get a list of the python keywords."""
     import keyword
 
-    return keyword.kwlist
+    return keyword.kwlist  # type: ignore[return-value]
 
     # if code_text is None:
     #     return python_keywords
@@ -215,25 +215,25 @@ def python_object_properties_enumerate(  # noqa: CCR001
     """Enumerate and print out the properties of the given object."""
     for i in python_object.__dir__():
         if not internal_properties:
-            if i.startswith('_'):
+            if i.startswith("_"):
                 continue
 
-        string_to_eval_as_property = 'python_object.{}'.format(i)
+        string_to_eval_as_property = "python_object.{}".format(i)
         try:
             if run_methods:
                 eval_result = eval(string_to_eval_as_property)  # pylint: disable=W0123
                 if callable(eval_result):
-                    string_to_eval_as_function = 'python_object.{}()'.format(i)
+                    string_to_eval_as_function = "python_object.{}()".format(i)
                     try:
-                        print(f'{i}: {eval(string_to_eval_as_function)}')  # pylint: disable=W0123
+                        print(f"{i}: {eval(string_to_eval_as_function)}")  # pylint: disable=W0123
                     except TypeError:
-                        print(f'{i}: {eval(string_to_eval_as_property)}')  # pylint: disable=W0123
+                        print(f"{i}: {eval(string_to_eval_as_property)}")  # pylint: disable=W0123
                 else:
-                    print(f'{i}: {eval_result}')
+                    print(f"{i}: {eval_result}")
             else:
-                print(f'{i}: {eval(string_to_eval_as_property)}')  # pylint: disable=W0123
+                print(f"{i}: {eval(string_to_eval_as_property)}")  # pylint: disable=W0123
         except AttributeError:
-            print(f'! Unable to get the {i} attribute for the item.')
+            print(f"! Unable to get the {i} attribute for the item.")
 
 
 def python_copy_deep(python_object: Any) -> Any:
@@ -255,7 +255,7 @@ def python_file_names(path: str, *, exclude_tests: bool = False) -> List[str]:  
     """Find all python files in the given directory."""
     from d8s_file_system import directory_file_names_matching
 
-    files = directory_file_names_matching(path, '*.py')
+    files = directory_file_names_matching(path, "*.py")
 
     if not exclude_tests:
         return files
@@ -263,7 +263,7 @@ def python_file_names(path: str, *, exclude_tests: bool = False) -> List[str]:  
         non_test_files = []
 
         for file in files:
-            if '_test' not in file and 'test_' not in file:
+            if "_test" not in file and "test_" not in file:
                 non_test_files.append(file)
 
         return non_test_files
@@ -281,7 +281,7 @@ def python_fstrings(code_text: str, *, include_braces: bool = False) -> Iterator
     python_f_strings = flatten(python_formatted_string_literal.searchString(code_text).asList())
 
     if not include_braces:
-        python_f_strings = (f_string.strip('{').strip('}') for f_string in python_f_strings)
+        python_f_strings = (f_string.strip("{").strip("}") for f_string in python_f_strings)
 
     return python_f_strings
 
@@ -306,7 +306,8 @@ def python_stack_local_data():
     """Get local data in the current python environment."""
     import inspect
 
-    return inspect.currentframe().f_locals
+    # in Python 3.13+ frame.f_locals returns a write-through proxy (PEP 667) rather than a dict, so coerce to a dict
+    return dict(inspect.currentframe().f_locals)
 
 
 # @decorators.map_first_arg
@@ -322,7 +323,7 @@ def python_object_source_file(python_object: Any) -> str:
     """Get the source file for the given python object (e.g. module, function, or class)."""
     import inspect
 
-    return inspect.getsourcefile(python_object)
+    return inspect.getsourcefile(python_object)  # type: ignore[return-value]
 
 
 # @decorators.map_first_arg
@@ -344,7 +345,7 @@ def python_object_signature(python_object: Any) -> str:
     """Get the argument signature for the given python object (e.g. module, function, or class)."""
     import inspect
 
-    return inspect.signature(python_object)
+    return inspect.signature(python_object)  # type: ignore[return-value]
 
 
 # TODO: improve the type annotations to be lists of types
@@ -388,18 +389,18 @@ def python_package_imports(code: str) -> Dict[str, List[str]]:
     # Start with the Import nodes.
     # These will always have an empty list of submodules
     # so we can just overwrite them without losing any data
-    modules = dict()
+    modules = dict()  # type: ignore[var-annotated]
     nodes = python_ast_objects_of_type(code, Import)
     for node in nodes:
-        for alias in node.names:
+        for alias in node.names:  # type: ignore[attr-defined]
             modules[alias.name] = []
 
     # Now for the ImportFrom nodes
     importfrom_nodes = python_ast_objects_of_type(code, ImportFrom)
     for node in importfrom_nodes:
-        module_name = _get_importfrom_module_name(node)
+        module_name = _get_importfrom_module_name(node)  # type: ignore[arg-type]
 
-        for alias in node.names:
+        for alias in node.names:  # type: ignore[attr-defined]
             modules.setdefault(module_name, []).append(alias.name)
 
     return modules
