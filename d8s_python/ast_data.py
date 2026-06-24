@@ -7,7 +7,7 @@ from d8s_lists import iterable_replace, truthy_items
 # TODO: all of these functions where code_text is given should also be able to read a file at a given path (?)
 
 
-def _python_ast_exception_name(node: Union[ast.Raise, ast.ExceptHandler]) -> str:  # type: ignore[return]
+def _python_ast_exception_name(node: Union[ast.Raise, ast.ExceptHandler]) -> Optional[str]:
     """."""
     if hasattr(node, "exc") and node.exc:  # this handles ast.Raise nodes
         if hasattr(
@@ -39,6 +39,8 @@ def _python_ast_exception_name(node: Union[ast.Raise, ast.ExceptHandler]) -> str
         return f"{node.value.id}.{node.attr}"  # type: ignore[union-attr]
     elif hasattr(node, "id"):  # this handles situations where the exception being raised is an ast.Name (e.g. "e")
         return node.id
+
+    return None
 
 
 def python_ast_raise_name(node: ast.Raise) -> Optional[str]:
