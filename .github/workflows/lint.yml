@@ -1,0 +1,32 @@
+# This workflow will install Python dependencies and lint the code with ruff and mypy
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.14'
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v6
+    - name: Install dependencies
+      run: uv sync --locked --group dev
+    - name: Lint
+      env:
+        CONTEXT: ci
+      run: ./docker/lint.sh

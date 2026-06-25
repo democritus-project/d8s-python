@@ -5,7 +5,7 @@
 [![Lint](https://github.com/democritus-project/d8s-python/workflows/Lint/badge.svg)](https://github.com/democritus-project/d8s-python/actions)
 [![codecov](https://codecov.io/gh/democritus-project/d8s-python/branch/main/graph/badge.svg?token=V0WOIXRGMM)](https://codecov.io/gh/democritus-project/d8s-python)
 [![The Democritus Project uses semver version 2.0.0](https://img.shields.io/badge/-semver%20v2.0.0-22bfda)](https://semver.org/spec/v2.0.0.html)
-[![The Democritus Project uses black to format code](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![The Democritus Project uses ruff to format and lint code](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://choosealicense.com/licenses/lgpl-3.0/)
 
 Democritus functions<sup>[1]</sup> for working with Python data (code and ASTs).
