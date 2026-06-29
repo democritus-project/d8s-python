@@ -1,0 +1,51 @@
+# Conventional-commit release automation.
+# On every push to main, release-please maintains a release PR (CHANGELOG +
+# version bump in pyproject.toml + d8s_lists/__init__.py). Merging that PR
+# tags vX.Y.Z and creates the GitHub Release; this same run then builds and
+# publishes to PyPI via OIDC.
+#
+# Publish is folded into THIS workflow on purpose: a tag pushed by
+# release-please uses GITHUB_TOKEN, which does NOT trigger a separate
+# tag-triggered workflow. Gating on release_created keeps OIDC (no PAT/secrets).
+
+name: release-please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write        # create release PR, tag, and GitHub Release
+  pull-requests: write   # open/update the release PR
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write    # required for OIDC trusted publishing
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+      - name: Build
+        run: uv build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
