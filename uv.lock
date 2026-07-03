@@ -343,16 +343,16 @@ wheels = [
 
 [[package]]
 name = "d8s-grammars"
-version = "0.6.0"
+version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "d8s-strings" },
     { name = "more-itertools" },
     { name = "pyparsing" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/92/00/9fbac01943676e138f4cb1ae4bee74744c53300fad801f136c8a37319cdb/d8s_grammars-0.6.0.tar.gz", hash = "sha256:31584a984d4db58c4ea24e49eb12cd477e6ab9694eac7145cb3b2837db3eedc9", size = 26928, upload-time = "2021-05-07T10:54:23.594Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/81/f2/cb43f31ddbc2c6c91f4e4bf9d42e5cba4809de17adae92950dcd077dc39a/d8s_grammars-0.7.0.tar.gz", hash = "sha256:fa04f20c757c1e8767b4f06afe9e3a2ad13f6fdc041e9c1eea0e509ef36af173", size = 93114, upload-time = "2026-07-01T12:06:23.823Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c6/66/f3a4963b0206913cc4b9866ce3394ab6c50cd22f268b76dd11c2bf5a711d/d8s_grammars-0.6.0-py2.py3-none-any.whl", hash = "sha256:82e9443c77541f1eae4c3ac0e2b446a15d1a547f7b106da499a5d6465be68c1b", size = 23271, upload-time = "2021-05-07T10:54:22.006Z" },
+    { url = "https://files.pythonhosted.org/packages/b5/e5/20e7781ba15824f525ecee363ecbd37ed91df5be16a20b83fe638ade65ce/d8s_grammars-0.7.0-py3-none-any.whl", hash = "sha256:14b9e12a35cb37772d5e0d861c9d6147f72e8a99e419e6ef36f4e767919a0035", size = 20396, upload-time = "2026-07-01T12:06:22.517Z" },
 ]
 
 [[package]]
@@ -408,7 +408,7 @@ wheels = [
 
 [[package]]
 name = "d8s-python"
-version = "0.9.0"
+version = "0.10.0"
 source = { editable = "." }
 dependencies = [
     { name = "d8s-algorithms" },
