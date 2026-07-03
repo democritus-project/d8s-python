@@ -303,14 +303,14 @@ toml = [
 
 [[package]]
 name = "d8s-algorithms"
-version = "0.7.0"
+version = "0.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "d8s-dicts" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/33/1d/01a85d279c4419a83ea50050a81121528dc84ab9815bc0d8b9e931ec4f14/d8s_algorithms-0.7.0.tar.gz", hash = "sha256:594d99f9c8d17148bb5ce4c8fa32839a2e069e92d250af5ec66df10c0fa2b2b9", size = 25655, upload-time = "2021-05-07T10:41:20.126Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/bc/0b/4c234114dc4ae26f1171dd7c8b92b7b974bea80d727becaf8e54ed65ff66/d8s_algorithms-0.8.0.tar.gz", hash = "sha256:cc676a8c23294618690dbf346040a06e780538cd1f0b0426ac713b0268c0a196", size = 91289, upload-time = "2026-07-01T12:03:34.784Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/89/9e/a66b85250756c37748b4cbb467ca502fe2dded213e74459670858078d731/d8s_algorithms-0.7.0-py2.py3-none-any.whl", hash = "sha256:323d0f8b95f1143c09bd13c476d89348b8d37fff1456ffa2a7ebd715cac42546", size = 21596, upload-time = "2021-05-07T10:41:17.754Z" },
+    { url = "https://files.pythonhosted.org/packages/f0/b1/9b49b53d9582e48f5247f861c78c1b5fe4917d28de4ead9b1963089ec733/d8s_algorithms-0.8.0-py3-none-any.whl", hash = "sha256:4b8305ab75381d87374026264846227d04cb3ce61d71d7da572666f246dfecac", size = 19576, upload-time = "2026-07-01T12:03:33.497Z" },
 ]
 
 [[package]]
@@ -408,7 +408,7 @@ wheels = [
 
 [[package]]
 name = "d8s-python"
-version = "0.9.0"
+version = "0.10.0"
 source = { editable = "." }
 dependencies = [
     { name = "d8s-algorithms" },
